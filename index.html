@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Abdul Rohman</title>
+    <style>
+        button {
+            width: 43px;
+            cursor: pointer;
+        }
+        hr {
+            width: 180px;
+            margin: 0;
+            margin-top: 20px;
+        }
+        h3 {
+            font-weight: 100;
+        }
+        h3 > span {
+            font-weight: 900;
+        }
+    </style>
+</head>
+<body>
+    <h2>Simple Calculator</h2>
+    <div>
+        <input type="text" data-isCount="false" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="input" data-index="1" placeholder="Input 1">
+        <input type="checkbox" onclick="check(this)" id="check1">
+    </div>
+
+    <br>
+
+    <div>
+        <input type="text" data-isCount="false" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="input" data-index="2" placeholder="Input 2">
+        <input type="checkbox" onclick="check(this)" id="check2">
+    </div>
+
+    <br>
+
+    <div>
+        <input type="text" data-isCount="false" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="input" data-index="3" placeholder="Input 3">
+        <input type="checkbox" onclick="check(this)" id="check3">
+    </div>
+
+    <br>
+
+    <button type="button" onclick="hitung('tambah')">+</button>
+    <button type="button" onclick="hitung('kurang')">-</button>
+    <button type="button" onclick="hitung('kali')">*</button>
+    <button type="button" onclick="hitung('bagi')">/</button>
+
+    <br>
+
+    <hr>
+
+    <h3>Hasil : <span id="hasil"></span></h3>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script>
+        function check(obj)
+        {
+            var obj = $(obj);
+            var parent = obj.parent();
+            var input = parent.find('input[type="text"]');
+            
+            if(obj.is(':checked'))
+            {
+                input.attr('data-isCount', 'true');
+            }
+            else
+            {
+                input.attr('data-isCount', 'false');
+            }
+        }
+
+        function hitung(value)
+        {
+            var input = $('.input');
+            var hasil = $('#hasil');
+            var result = '';
+            var count = 0;
+
+            input.each(function(){
+                var obj = $(this);
+                var isCount = obj.attr('data-isCount');
+                var index = obj.attr('data-index');
+
+                if(isCount == 'true')
+                {
+                    count++;
+
+                    if(obj.val() == '')
+                    {
+                        alert('Inputan ke-'+index+' harus diisi ketika sudah di cek');
+
+                        if(count < 3)
+                        {
+                            result = '';
+                        }
+                    }
+                    else
+                    {
+                        result = (result != '') ? parseInt(result) : 0;
+
+                        switch (value) {
+                            case 'tambah':
+                                result += parseInt(obj.val());
+                                break;
+
+                            case 'kurang':
+                                if(index != 3)
+                                {
+                                    result = (result == '') ? obj.val() : result - parseInt(obj.val());
+                                }
+                                else
+                                {
+                                    result = result - parseInt(obj.val());
+                                }
+                                break;
+
+                            case 'kali':
+                                result = (result == 0) ? obj.val() : result * parseInt(obj.val());
+                                break;
+
+                            case 'bagi':
+                                result = (result == 0) ? obj.val() : result / parseInt(obj.val());
+                                break;    
+                        
+                            default:
+                                break;
+                        }
+                    }
+                }
+            });
+
+            if(count < 2)
+            {
+                alert('Silahkan cek dan isi setidaknya 2 inputan');
+                result = '';
+            }
+
+            hasil.text(result);
+        }
+    </script>
+</body>
+</html>
